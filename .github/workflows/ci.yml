@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [14.x]
+        node-version: [16.x, 18.x, 19.x]
 
     runs-on: ${{ matrix.os }}
 
@@ -49,6 +49,9 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build and Test
         run: pnpm test
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
 
   release:
     runs-on: ubuntu-latest
