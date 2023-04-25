@@ -46,5 +46,4 @@ export * from './types'
 export * from './character-classes'
 export * from './combinators'
 
-export * from './arbitrary'
 export * from './regex'

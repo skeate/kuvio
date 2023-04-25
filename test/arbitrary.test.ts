@@ -1,6 +1,7 @@
 import * as fc from 'fast-check'
 import { pipe } from 'fp-ts/function'
 import * as k from '../src'
+import { arbitraryFromPattern } from '../src/arbitrary'
 
 describe('arbitrary derivation', () => {
 	const pattern: k.Pattern = pipe(
@@ -35,7 +36,7 @@ describe('arbitrary derivation', () => {
 	)
 
 	it('can create Arbitraries', () => {
-		const arbitrary = k.arbitraryFromPattern(pattern)
+		const arbitrary = arbitraryFromPattern(pattern)
 
 		// woof, bad testing practices ahead, but I'm not sure of a better way to test Arbitraries
 		const regex = k.regexFromPattern(pattern)
