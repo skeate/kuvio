@@ -47,6 +47,7 @@
 		"fp-ts": "^2.13.1"
 	},
 	"devDependencies": {
+		"@trivago/prettier-plugin-sort-imports": "^4.1.1",
 		"@types/jest": "^29.5.1",
 		"commitizen": "^4.3.0",
 		"cz-conventional-changelog": "^3.3.0",

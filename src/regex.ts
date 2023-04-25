@@ -1,8 +1,9 @@
 import { match } from '@simspace/matchers'
-import { Atom, Pattern, QuantifiedAtom, Term } from './types'
-import { pipe } from 'fp-ts/function'
 import * as O from 'fp-ts/Option'
 import * as RNEA from 'fp-ts/ReadonlyNonEmptyArray'
+import { pipe } from 'fp-ts/function'
+
+import { Atom, Pattern, QuantifiedAtom, Term } from './types'
 
 const matchK = match.on('kind').w
 

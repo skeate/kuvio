@@ -1,5 +1,6 @@
 import { pipe } from 'fp-ts/function'
-import { characterClass, and } from './base'
+
+import { and, characterClass } from './base'
 import { CharacterClass } from './types'
 
 /**

@@ -1,4 +1,5 @@
 import * as fc from 'fast-check'
+
 import * as k from '../src'
 
 describe('combinators', () => {

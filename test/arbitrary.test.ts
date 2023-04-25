@@ -1,5 +1,6 @@
 import * as fc from 'fast-check'
 import { pipe } from 'fp-ts/function'
+
 import * as k from '../src'
 import { arbitraryFromPattern } from '../src/arbitrary'
 

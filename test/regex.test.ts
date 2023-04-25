@@ -1,4 +1,5 @@
 import { pipe } from 'fp-ts/function'
+
 import * as k from '../src'
 
 describe('kuvio', () => {
