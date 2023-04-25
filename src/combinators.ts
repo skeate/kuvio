@@ -1,13 +1,14 @@
-import { pipe } from 'fp-ts/function'
 import * as RA from 'fp-ts/ReadonlyArray'
+import { pipe } from 'fp-ts/function'
+
 import {
-	or,
 	char,
 	characterClass,
-	then,
-	subgroup,
-	sequence,
 	empty,
+	or,
+	sequence,
+	subgroup,
+	then,
 } from './base'
 import { digit } from './character-classes'
 import { Pattern, Term, TermSequence } from './types'

@@ -1,5 +1,6 @@
 import { match } from '@simspace/matchers'
 import * as RA from 'fp-ts/ReadonlyArray'
+
 import {
 	Atom,
 	Char,
