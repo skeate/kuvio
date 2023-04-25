@@ -8,8 +8,7 @@
 		"skipLibCheck": true,
 		"noUnusedLocals": true,
 		"noImplicitAny": true,
-		"outDir": "dist",
-		"composite": true
+		"outDir": "dist"
 	},
-	"include": ["src/**/*"]
+	"include": ["src/**/*.ts"]
 }
