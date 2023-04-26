@@ -179,6 +179,21 @@ export const between: (
 })
 
 /**
+ * Repeat an `Atom` at most some number of times. For example, `atMost(3)(char('a'))`
+ * represents ``, `a`, and `aaa` but not `aaaa`
+ *
+ * @since 1.1.0
+ */
+export const atMost: (min: number) => (atom: Atom) => QuantifiedAtom =
+	(max) => (atom) => ({
+		tag: 'quantifiedAtom',
+		atom,
+		kind: 'between',
+		min: 0,
+		max,
+	})
+
+/**
  * Create a disjunction of two patterns. In regular expression terms, this corresponds to `|`.
  *
  * @since 0.0.1
