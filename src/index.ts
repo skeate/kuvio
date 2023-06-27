@@ -47,3 +47,4 @@ export * from './character-classes'
 export * from './combinators'
 
 export * from './regex'
+export * as patterns from './patterns'
