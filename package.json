@@ -5,25 +5,26 @@
 	"files": [
 		"dist"
 	],
+	"sideEffects": false,
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
+			"types": "./dist/index.d.ts",
 			"require": "./dist/index.js",
 			"import": "./dist/index.mjs",
 			"node": "./dist/index.js",
-			"types": "./dist/index.d.ts",
 			"default": "./dist/index.global.js"
 		},
 		"./arbitrary": {
+			"types": "./dist/arbitrary.d.ts",
 			"require": "./dist/arbitrary.js",
 			"import": "./dist/arbitrary.mjs",
 			"node": "./dist/arbitrary.js",
-			"types": "./dist/arbitrary.d.ts",
 			"default": "./dist/arbitrary.global.js"
 		}
 	},
-	"types": "./dist/index.d.ts",
 	"scripts": {
 		"build": "rimraf dist && tsup",
 		"test": "jest",
