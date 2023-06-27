@@ -12,16 +12,16 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
+			"node": "./dist/index.js",
 			"require": "./dist/index.js",
 			"import": "./dist/index.mjs",
-			"node": "./dist/index.js",
 			"default": "./dist/index.global.js"
 		},
 		"./arbitrary": {
 			"types": "./dist/arbitrary.d.ts",
+			"node": "./dist/arbitrary.js",
 			"require": "./dist/arbitrary.js",
 			"import": "./dist/arbitrary.mjs",
-			"node": "./dist/arbitrary.js",
 			"default": "./dist/arbitrary.global.js"
 		}
 	},
