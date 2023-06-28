@@ -17,5 +17,43 @@ concept to more complicated data types, check out [schemata-ts][]! `kuvio` was
 originally developed as part of `schemata-ts` but was extracted as it seems
 useful independently.
 
+## Usage
+
+`kuvio` comes with several useful patterns built-in, but you can also create
+your own.
+
+```typescript
+import * as k from 'kuvio';
+
+// Use built-in patterns
+const creditCardRegex = k.regexFromPattern(k.patterns.creditCard);
+
+// Create your own patterns.
+const areaCode = k.exactly(3)(k.digit)
+const exchangeCode = k.exactly(3)(k.digit)
+const lineNumber = k.exactly(4)(k.digit)
+
+// Create pattern functions
+const parenthesize = (p: k.Pattern) => k.subgroup(
+  k.sequence(k.char('('), p, k.char(')')
+)
+
+// Compose patterns to make more complex patterns
+const phoneNumberPattern = k.sequence(
+  parenthesize(areaCode),
+  k.char(' '),
+  k.subgroup(exchangeCode),
+  k.char('-'),
+  k.subgroup(lineNumber),
+)
+```
+
+See the [patterns](src/patterns) directory for the built-in patterns, which can also be useful examples for creating your own.
+
+**Note:** Arbitraries are intended primarily for use in test code; in order to
+help keep `fast-check` out of your production code, `kuvio` does not include
+`fast-check` in the main export. If you want to use the `Arbitrary` functions,
+you'll need to import them separately from `kuvio/arbitrary`.
+
 [fast-check]: https://github.com/dubzzz/fast-check
 [schemata-ts]: https://github.com/jacob-alford/schemata-ts
