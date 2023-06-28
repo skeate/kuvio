@@ -50,10 +50,18 @@ const phoneNumberPattern = k.sequence(
 
 See the [patterns](src/patterns) directory for the built-in patterns, which can also be useful examples for creating your own.
 
-**Note:** Arbitraries are intended primarily for use in test code; in order to
+#### Note regarding `fast-check` usage
+
+Arbitraries are intended primarily for use in test code; in order to
 help keep `fast-check` out of your production code, `kuvio` does not include
 `fast-check` in the main export. If you want to use the `Arbitrary` functions,
 you'll need to import them separately from `kuvio/arbitrary`.
+
+If you are needlessly paranoid about `fast-check` possibly getting bundled in
+your application, `kuvio` also exports a version of the `Arbitrary` functions
+that take the `fast-check` library as an argument. You can import these from
+`kuvio/arbitrary-deferred`. However, this is going to be less efficient and
+convenient to use, so probably don't worry about it.
 
 [fast-check]: https://github.com/dubzzz/fast-check
 [schemata-ts]: https://github.com/jacob-alford/schemata-ts

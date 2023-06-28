@@ -23,6 +23,13 @@
 			"require": "./dist/arbitrary.js",
 			"import": "./dist/arbitrary.mjs",
 			"default": "./dist/arbitrary.global.js"
+		},
+		"./arbitrary-deferred": {
+			"types": "./dist/arbitrary-deferred.d.ts",
+			"node": "./dist/arbitrary-deferred.js",
+			"require": "./dist/arbitrary-deferred.js",
+			"import": "./dist/arbitrary-deferred.mjs",
+			"default": "./dist/arbitrary-deferred.global.js"
 		}
 	},
 	"scripts": {
