@@ -1,9 +1,13 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@simspace/matchers':
-    specifier: ^0.0.2
-    version: 0.0.2(fp-ts@2.13.1)
+    specifier: ^0.0.4
+    version: 0.0.4(fp-ts@2.13.1)
   fp-ts:
     specifier: ^2.13.1
     version: 2.13.1
@@ -988,8 +992,8 @@ packages:
     dev: true
     optional: true
 
-  /@simspace/matchers@0.0.2(fp-ts@2.13.1):
-    resolution: {integrity: sha512-aTxHrw3xdaYNsK925/AwDFMfayswfv0YT8SB+CFG/SWxtXQK9K27FgDXGEw1taM2hutjfUibO/jDhPAz7tO4ww==}
+  /@simspace/matchers@0.0.4(fp-ts@2.13.1):
+    resolution: {integrity: sha512-WYCbqmN+WaUKaZoCtiRP8AnAd7pM/jX2EM24m37ghodhYdXhas9LdrH00nqjlbkS9YShcAYNHjw3F1zyQ94NcQ==}
     peerDependencies:
       fp-ts: ^2.11
     dependencies:

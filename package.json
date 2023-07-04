@@ -51,7 +51,7 @@
 	"author": "Jonathan Skeate",
 	"license": "MIT",
 	"dependencies": {
-		"@simspace/matchers": "^0.0.2",
+		"@simspace/matchers": "^0.0.4",
 		"fp-ts": "^2.13.1"
 	},
 	"devDependencies": {
