@@ -9,12 +9,16 @@ const matchK = match.on('kind').w
 
 const repr = (n: number): string =>
 	// < 32 -> control characters
-	// 45 -> '-'.. seems like `/[--z]/` for example actually works, but looks weird.
+	// 45 -> '-'.. seems like `/[--z]/` for example actually works, but looks
+	// weird.
+	// 47 -> '/' doesn't need to be escaped in JS, but it's helpful for copying
+	// into regex debuggers since it must be escaped in some languages
+	// 92 -> '\' just to avoid any issues with escaping
 	// 93 -> ']' which needs to be escaped
 	// 94 -> '^' which might get parsed as class exclusion marker, so escape just in case
 	// 127 -> del
 	// >127 -> outside normal ascii range. escape 'em
-	n < 32 || n === 45 || n === 93 || n === 94 || n >= 127
+	n < 32 || n === 45 || n === 47 || n === 92 || n === 93 || n === 94 || n >= 127
 		? n > 255
 			? `\\u${n.toString(16).padStart(4, '0')}`
 			: `\\x${n.toString(16).padStart(2, '0')}`
