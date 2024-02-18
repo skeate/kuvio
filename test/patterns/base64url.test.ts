@@ -1,5 +1,5 @@
 import { base64Url } from '../../src/patterns/base64url'
-import { testPattern } from '../utils/test-pattern'
+import { testPattern } from '../test-utils/test-pattern'
 
 testPattern({
 	name: 'base64url',

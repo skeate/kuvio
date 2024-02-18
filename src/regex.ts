@@ -1,7 +1,4 @@
 import { match } from '@simspace/matchers'
-import * as O from 'fp-ts/Option'
-import * as RNEA from 'fp-ts/ReadonlyNonEmptyArray'
-import { pipe } from 'fp-ts/function'
 
 import { Atom, Pattern, QuantifiedAtom, Term } from './types'
 
@@ -41,21 +38,13 @@ const regexStringFromAtom: (atom: Atom) => string = matchK({
 			? '\\+'
 			: char,
 	characterClass: ({ exclude, ranges }) =>
-		pipe(
-			RNEA.fromReadonlyArray(ranges),
-			O.chain(O.fromPredicate((s) => s.length === 1)),
-			O.chain(([{ lower, upper }]) =>
-				lower === 48 && upper === 57 ? O.some('\\d') : O.none,
-			),
-			O.getOrElse(
-				() =>
-					`[${exclude ? '^' : ''}${ranges
-						.map(({ lower, upper }) =>
-							lower === upper ? repr(lower) : `${repr(lower)}-${repr(upper)}`,
-						)
-						.join('')}]`,
-			),
-		),
+		ranges.length === 1 && ranges[0].lower === 48 && ranges[0].upper === 57
+			? '\\d'
+			: `[${exclude ? '^' : ''}${ranges
+					.map(({ lower, upper }) =>
+						lower === upper ? repr(lower) : `${repr(lower)}-${repr(upper)}`,
+					)
+					.join('')}]`,
 	subgroup: ({ subpattern }) => `(${regexStringFromPattern(subpattern)})`,
 })
 

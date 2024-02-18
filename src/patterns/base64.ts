@@ -1,5 +1,3 @@
-import { pipe } from 'fp-ts/function'
-
 import {
 	and,
 	anyNumber,
@@ -14,6 +12,7 @@ import {
 import { alnum } from '../character-classes'
 import { oneOf } from '../combinators'
 import { Pattern } from '../types'
+import { pipe } from '../util/pipe'
 
 export const base64Character = pipe(alnum, and(characterClass(false, '+', '/')))
 

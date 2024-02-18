@@ -1,5 +1,3 @@
-import { pipe } from 'fp-ts/function'
-
 import {
 	and,
 	anyNumber,
@@ -16,6 +14,7 @@ import {
 } from '../base'
 import { alnum, alpha, digit } from '../character-classes'
 import { Pattern } from '../types'
+import { pipe } from '../util/pipe'
 
 // (".+")
 const localPartQuoted = pipe(

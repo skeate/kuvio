@@ -8,8 +8,6 @@
  * If you want Luhn checksum validation, you can use the
  * [`schemata-ts`](https://github.com/jacob-alford/schemata-ts) library.
  */
-import { pipe } from 'fp-ts/function'
-
 import {
 	between,
 	char,
@@ -23,6 +21,7 @@ import {
 } from '../base'
 import { digit } from '../character-classes'
 import { oneOf } from '../combinators'
+import { pipe } from '../util/pipe'
 
 // source: https://en.wikipedia.org/w/index.php?title=Payment_card_number&oldid=1110892430
 // afaict the 13-digit variant has not been a thing for years, but maybe there

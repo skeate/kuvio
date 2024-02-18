@@ -7,12 +7,11 @@
  * @since 0.0.1
  * @example
  *   import * as k from 'kuvio'
- *   import { pipe } from 'fp-ts/function'
  *
  *   const digit = k.characterClass(false, ['0', '9'])
  *
  *   const areaCode = pipe(
- *     pipe(
+ *     k.pipe(
  *       k.char('('),
  *       k.then(k.times(3)(digit)),
  *       k.then(k.char(')')),
@@ -26,7 +25,7 @@
  *
  *   const lineNumber = k.times(4)(digit)
  *
- *   export const usPhoneNumber = pipe(
+ *   export const usPhoneNumber = k.pipe(
  *     areaCode,
  *     k.then(pipe(k.char('-'), k.maybe)),
  *     k.then(prefix),
@@ -48,3 +47,4 @@ export * from './combinators'
 
 export * from './regex'
 export * as patterns from './patterns'
+export * from './util/pipe'

@@ -1,5 +1,5 @@
 import { hslColor } from '../../src/patterns/hsl-color'
-import { testPattern } from '../utils/test-pattern'
+import { testPattern } from '../test-utils/test-pattern'
 
 testPattern({
 	name: 'hslColor',

@@ -1,8 +1,7 @@
-import { pipe } from 'fp-ts/function'
-
 import { between, char, exactly, maybe, or, subgroup, then } from '../base'
 import { hexDigit } from '../character-classes'
 import { Pattern } from '../types'
+import { pipe } from '../util/pipe'
 
 /**
  * Matches a hex color, with or without a leading '#'. Matches both short form

@@ -1,8 +1,7 @@
-import { pipe } from 'fp-ts/function'
-
 import { atLeastOne, exactString, maybe, or, subgroup, then } from '../base'
 import { xdigit } from '../character-classes'
 import { Pattern } from '../types'
+import { pipe } from '../util/pipe'
 
 /**
  * Matches a hexadecimal number, with or without a leading '0x' or '0h', in any

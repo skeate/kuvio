@@ -1,9 +1,8 @@
 import { match } from '@simspace/matchers'
 import type * as FastCheck from 'fast-check'
-import * as RA from 'fp-ts/ReadonlyArray'
-import { pipe } from 'fp-ts/function'
 
 import { Atom, Pattern, QuantifiedAtom, Term } from './types'
+import { pipe } from './util/pipe'
 
 const matchK = match.on('kind').w
 
@@ -80,14 +79,12 @@ const chainConcatAll: (
 	fc: typeof FastCheck,
 ) => (
 	fcs: ReadonlyArray<FastCheck.Arbitrary<string>>,
-) => FastCheck.Arbitrary<string> = (fc) =>
-	RA.foldLeft(
-		() => fc.constant(''),
-		(head, tail) =>
-			head.chain((headStr) =>
-				chainConcatAll(fc)(tail).map((tailStr) => headStr + tailStr),
-			),
-	)
+) => FastCheck.Arbitrary<string> = (fc) => (fcs) =>
+	fcs.length === 0
+		? fc.constant('')
+		: fcs[0].chain((headStr) =>
+				chainConcatAll(fc)(fcs.slice(1)).map((tailStr) => headStr + tailStr),
+		  )
 
 /**
  * Construct a `fast-check` `Arbitrary` instance from a given `Pattern`.
