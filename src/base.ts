@@ -1,5 +1,3 @@
-import { match } from '@simspace/matchers'
-
 import {
 	Atom,
 	Char,
@@ -206,12 +204,18 @@ export const or: (
 	right,
 })
 
-const getTerms: (termOrSeq: Term | TermSequence) => TermSequence['terms'] =
-	match.w({
-		termSequence: ({ terms }) => terms,
-		atom: (atom) => [atom],
-		quantifiedAtom: (qatom) => [qatom],
-	})
+const getTerms: (termOrSeq: Term | TermSequence) => TermSequence['terms'] = (
+	termOrSeq,
+) => {
+	switch (termOrSeq.tag) {
+		case 'termSequence':
+			return termOrSeq.terms
+		case 'atom':
+			return [termOrSeq]
+		case 'quantifiedAtom':
+			return [termOrSeq]
+	}
+}
 
 /**
  * Append a term or term sequence onto another.

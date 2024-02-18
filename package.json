@@ -50,9 +50,6 @@
 	],
 	"author": "Jonathan Skeate",
 	"license": "MIT",
-	"dependencies": {
-		"@simspace/matchers": "^0.0.4"
-	},
 	"devDependencies": {
 		"@trivago/prettier-plugin-sort-imports": "^4.1.1",
 		"@types/jest": "^29.5.1",

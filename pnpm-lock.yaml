@@ -4,11 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  '@simspace/matchers':
-    specifier: ^0.0.4
-    version: 0.0.4(fp-ts@2.13.1)
-
 devDependencies:
   '@trivago/prettier-plugin-sort-imports':
     specifier: ^4.1.1
@@ -995,15 +990,6 @@ packages:
     dev: true
     optional: true
 
-  /@simspace/matchers@0.0.4(fp-ts@2.13.1):
-    resolution: {integrity: sha512-WYCbqmN+WaUKaZoCtiRP8AnAd7pM/jX2EM24m37ghodhYdXhas9LdrH00nqjlbkS9YShcAYNHjw3F1zyQ94NcQ==}
-    peerDependencies:
-      fp-ts: ^2.11
-    dependencies:
-      fp-ts: 2.13.1
-      typelevel-ts: 0.4.0
-    dev: false
-
   /@sinclair/typebox@0.25.24:
     resolution: {integrity: sha512-XJfwUVUKDHF5ugKwIcxEgc9k8b7HbznCp6eUfWgu710hMPNIO4aw4/zB5RogDQz8nd6gyCDpU9O/m6qYEWY6yQ==}
     dev: true
@@ -1912,10 +1898,6 @@ packages:
       cross-spawn: 7.0.3
       signal-exit: 4.0.1
     dev: true
-
-  /fp-ts@2.13.1:
-    resolution: {integrity: sha512-0eu5ULPS2c/jsa1lGFneEFFEdTbembJv8e4QKXeVJ3lm/5hyve06dlKZrpxmMwJt6rYen7sxmHHK2CLaXvWuWQ==}
-    dev: false
 
   /fs-extra@9.1.0:
     resolution: {integrity: sha512-hcg3ZmepS30/7BSFqRvoo3DOMQu7IjqxO5nCDt+zM9XWjb33Wg7ziNT+Qvqbuc3+gWpzO02JubVyk2G4Zvo1OQ==}
@@ -3646,10 +3628,6 @@ packages:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
     dev: true
-
-  /typelevel-ts@0.4.0:
-    resolution: {integrity: sha512-Qn4EgOuc7lrzjgJYc7arwteuZutO18zFyhVj4/6+BEhPr07BMsqaM02LuuRCVFP1ud5tbDYGn/Vr/BAYnGOSqw==}
-    dev: false
 
   /typescript@5.0.4:
     resolution: {integrity: sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==}
