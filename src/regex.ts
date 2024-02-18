@@ -1,11 +1,4 @@
-import { match } from '@simspace/matchers'
-import * as O from 'fp-ts/Option'
-import * as RNEA from 'fp-ts/ReadonlyNonEmptyArray'
-import { pipe } from 'fp-ts/function'
-
 import { Atom, Pattern, QuantifiedAtom, Term } from './types'
-
-const matchK = match.on('kind').w
 
 const repr = (n: number): string =>
 	// < 32 -> control characters
@@ -24,67 +17,90 @@ const repr = (n: number): string =>
 			: `\\x${n.toString(16).padStart(2, '0')}`
 		: String.fromCharCode(n)
 
-const regexStringFromAtom: (atom: Atom) => string = matchK({
-	anything: () => '.',
-	character: ({ char }) =>
-		char === '['
-			? '\\['
-			: char === ']'
-			? '\\]'
-			: char === '.'
-			? '\\.'
-			: char === '('
-			? '\\('
-			: char === ')'
-			? '\\)'
-			: char === '+'
-			? '\\+'
-			: char,
-	characterClass: ({ exclude, ranges }) =>
-		pipe(
-			RNEA.fromReadonlyArray(ranges),
-			O.chain(O.fromPredicate((s) => s.length === 1)),
-			O.chain(([{ lower, upper }]) =>
-				lower === 48 && upper === 57 ? O.some('\\d') : O.none,
-			),
-			O.getOrElse(
-				() =>
-					`[${exclude ? '^' : ''}${ranges
+const charEscapes = new Map<string, string>([
+	['[', '\\['],
+	[']', '\\]'],
+	['.', '\\.'],
+	['(', '\\('],
+	[')', '\\)'],
+	['+', '\\+'],
+])
+
+const regexStringFromAtom: (atom: Atom) => string = (atom) => {
+	switch (atom.kind) {
+		case 'anything':
+			return '.'
+		case 'character':
+			return charEscapes.get(atom.char) ?? atom.char
+		case 'characterClass': {
+			const { exclude, ranges } = atom
+			return ranges.length === 1 &&
+				ranges[0].lower === 48 &&
+				ranges[0].upper === 57
+				? `\\d`
+				: `[${exclude ? '^' : ''}${ranges
 						.map(({ lower, upper }) =>
 							lower === upper ? repr(lower) : `${repr(lower)}-${repr(upper)}`,
 						)
-						.join('')}]`,
-			),
-		),
-	subgroup: ({ subpattern }) => `(${regexStringFromPattern(subpattern)})`,
-})
+						.join('')}]`
+		}
+		case 'subgroup':
+			return `(${regexStringFromPattern(atom.subpattern)})`
+	}
+}
 
 const regexStringFromQuantifiedAtom: (
 	quantifiedAtom: QuantifiedAtom,
-) => string = matchK({
-	star: ({ atom, greedy }) =>
-		`${regexStringFromAtom(atom)}*${greedy ? '' : '?'}`,
-	plus: ({ atom, greedy }) =>
-		`${regexStringFromAtom(atom)}+${greedy ? '' : '?'}`,
-	question: ({ atom }) => `${regexStringFromAtom(atom)}?`,
-	exactly: ({ atom, count }) => `${regexStringFromAtom(atom)}{${count}}`,
-	between: ({ atom, min, max }) =>
-		`${regexStringFromAtom(atom)}{${min},${max}}`,
-	minimum: ({ atom, min }) => `${regexStringFromAtom(atom)}{${min},}`,
-})
+) => string = (quantifiedAtom) => {
+	switch (quantifiedAtom.kind) {
+		case 'star':
+			return `${regexStringFromAtom(quantifiedAtom.atom)}*${
+				quantifiedAtom.greedy ? '' : '?'
+			}`
+		case 'plus':
+			return `${regexStringFromAtom(quantifiedAtom.atom)}+${
+				quantifiedAtom.greedy ? '' : '?'
+			}`
+		case 'question':
+			return `${regexStringFromAtom(quantifiedAtom.atom)}?`
+		case 'exactly':
+			return `${regexStringFromAtom(quantifiedAtom.atom)}{${
+				quantifiedAtom.count
+			}}`
+		case 'between':
+			return `${regexStringFromAtom(quantifiedAtom.atom)}{${
+				quantifiedAtom.min
+			},${quantifiedAtom.max}}`
+		case 'minimum':
+			return `${regexStringFromAtom(quantifiedAtom.atom)}{${
+				quantifiedAtom.min
+			},}`
+	}
+}
 
-const regexStringFromTerm: (term: Term) => string = match.w({
-	atom: regexStringFromAtom,
-	quantifiedAtom: regexStringFromQuantifiedAtom,
-})
+const regexStringFromTerm: (term: Term) => string = (term) => {
+	switch (term.tag) {
+		case 'atom':
+			return regexStringFromAtom(term)
+		case 'quantifiedAtom':
+			return regexStringFromQuantifiedAtom(term)
+	}
+}
 
-const regexStringFromPattern: (pattern: Pattern) => string = match.w({
-	atom: regexStringFromAtom,
-	disjunction: ({ left, right }) =>
-		`${regexStringFromPattern(left)}|${regexStringFromPattern(right)}`,
-	quantifiedAtom: regexStringFromQuantifiedAtom,
-	termSequence: ({ terms }) => terms.map(regexStringFromTerm).join(''),
-})
+const regexStringFromPattern: (pattern: Pattern) => string = (pattern) => {
+	switch (pattern.tag) {
+		case 'atom':
+			return regexStringFromAtom(pattern)
+		case 'disjunction':
+			return `${regexStringFromPattern(pattern.left)}|${regexStringFromPattern(
+				pattern.right,
+			)}`
+		case 'quantifiedAtom':
+			return regexStringFromQuantifiedAtom(pattern)
+		case 'termSequence':
+			return pattern.terms.map(regexStringFromTerm).join('')
+	}
+}
 
 /**
  * Construct a regular expression (`RegExp`) from a given `Pattern`.

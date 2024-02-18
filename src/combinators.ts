@@ -1,6 +1,3 @@
-import * as RA from 'fp-ts/ReadonlyArray'
-import { pipe } from 'fp-ts/function'
-
 import {
 	char,
 	characterClass,
@@ -12,6 +9,7 @@ import {
 } from './base'
 import { digit } from './character-classes'
 import { Pattern, Term, TermSequence } from './types'
+import { pipe } from './util/pipe'
 
 /**
  * Form a disjunction of multiple terms or term sequences.
@@ -22,10 +20,7 @@ export const oneOf: (
 	pattern: Pattern,
 	...terms: ReadonlyArray<Term | TermSequence>
 ) => Pattern = (pattern, ...patterns) =>
-	pipe(
-		patterns,
-		RA.reduce(pattern, (ored, next) => pipe(ored, or(next))),
-	)
+	patterns.reduce((ored, next) => pipe(ored, or(next)), pattern)
 
 const integerRange_: (
 	min: string,

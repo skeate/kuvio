@@ -1,5 +1,5 @@
 import { creditCard } from '../../src/patterns/credit-card'
-import { testPattern } from '../utils/test-pattern'
+import { testPattern } from '../test-utils/test-pattern'
 
 testPattern({
 	name: 'creditCard',

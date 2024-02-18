@@ -1,7 +1,6 @@
-import { pipe } from 'fp-ts/function'
-
 import { and, characterClass } from './base'
 import { CharacterClass } from './types'
+import { pipe } from './util/pipe'
 
 /**
  * Any upper case letter in ASCII. See [POSIX

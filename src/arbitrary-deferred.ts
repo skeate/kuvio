@@ -1,93 +1,101 @@
-import { match } from '@simspace/matchers'
 import type * as FastCheck from 'fast-check'
-import * as RA from 'fp-ts/ReadonlyArray'
-import { pipe } from 'fp-ts/function'
 
 import { Atom, Pattern, QuantifiedAtom, Term } from './types'
-
-const matchK = match.on('kind').w
+import { pipe } from './util/pipe'
 
 /** @internal */
 export const arbitraryFromAtom: (
 	fc: typeof FastCheck,
-) => (atom: Atom) => FastCheck.Arbitrary<string> = (fc) =>
-	matchK({
-		anything: () => fc.char(),
-		character: ({ char }) => fc.constant(char),
-		characterClass: ({ exclude, ranges }) =>
-			(exclude
-				? fc
-						.integer({ min: 1, max: 0xffff })
-						.filter((i) =>
-							ranges.every(({ lower, upper }) => i > upper || i < lower),
-						)
-				: fc.oneof(
-						...ranges.map(({ lower, upper }) =>
-							fc.integer({ min: lower, max: upper }),
-						),
-				  )
-			).map((charCode) => String.fromCharCode(charCode)),
-		subgroup: ({ subpattern }) => arbitraryFromPattern(fc)(subpattern),
-	})
+) => (atom: Atom) => FastCheck.Arbitrary<string> = (fc) => (atom) => {
+	switch (atom.kind) {
+		case 'anything':
+			return fc.char()
+		case 'character':
+			return fc.constant(atom.char)
+		case 'characterClass':
+			return (
+				atom.exclude
+					? fc
+							.integer({ min: 1, max: 0xffff })
+							.filter((i) =>
+								atom.ranges.every(({ lower, upper }) => i > upper || i < lower),
+							)
+					: fc.oneof(
+							...atom.ranges.map(({ lower, upper }) =>
+								fc.integer({ min: lower, max: upper }),
+							),
+					  )
+			).map((charCode) => String.fromCharCode(charCode))
+		case 'subgroup':
+			return arbitraryFromPattern(fc)(atom.subpattern)
+	}
+}
 
 /** @internal */
 export const arbitraryFromQuantifiedAtom: (
 	fc: typeof FastCheck,
-) => (quantifiedAtom: QuantifiedAtom) => FastCheck.Arbitrary<string> = (fc) =>
-	matchK({
-		star: ({ atom }) =>
-			fc.array(arbitraryFromAtom(fc)(atom)).map((strs) => strs.join('')),
-		plus: ({ atom }) =>
-			fc
-				.array(arbitraryFromAtom(fc)(atom), { minLength: 1 })
-				.map((strs) => strs.join('')),
-		question: ({ atom }) =>
-			fc
-				.array(arbitraryFromAtom(fc)(atom), {
-					minLength: 0,
-					maxLength: 1,
-				})
-				.map((strs) => strs.join('')),
-		exactly: ({ atom, count }) =>
-			fc
-				.array(arbitraryFromAtom(fc)(atom), {
-					minLength: count,
-					maxLength: count,
-				})
-				.map((strs) => strs.join('')),
-		between: ({ atom, min, max }) =>
-			fc
-				.array(arbitraryFromAtom(fc)(atom), {
-					minLength: min,
-					maxLength: max,
-				})
-				.map((strs) => strs.join('')),
-		minimum: ({ atom, min }) =>
-			fc
-				.array(arbitraryFromAtom(fc)(atom), { minLength: min })
-				.map((strs) => strs.join('')),
-	})
+) => (quantifiedAtom: QuantifiedAtom) => FastCheck.Arbitrary<string> =
+	(fc) => (quantifiedAtom) => {
+		switch (quantifiedAtom.kind) {
+			case 'star':
+				return fc
+					.array(arbitraryFromAtom(fc)(quantifiedAtom.atom))
+					.map((strs) => strs.join(''))
+			case 'plus':
+				return fc
+					.array(arbitraryFromAtom(fc)(quantifiedAtom.atom), { minLength: 1 })
+					.map((strs) => strs.join(''))
+			case 'question':
+				return fc
+					.array(arbitraryFromAtom(fc)(quantifiedAtom.atom), {
+						minLength: 0,
+						maxLength: 1,
+					})
+					.map((strs) => strs.join(''))
+			case 'exactly':
+				return fc
+					.array(arbitraryFromAtom(fc)(quantifiedAtom.atom), {
+						minLength: quantifiedAtom.count,
+						maxLength: quantifiedAtom.count,
+					})
+					.map((strs) => strs.join(''))
+			case 'between':
+				return fc
+					.array(arbitraryFromAtom(fc)(quantifiedAtom.atom), {
+						minLength: quantifiedAtom.min,
+						maxLength: quantifiedAtom.max,
+					})
+					.map((strs) => strs.join(''))
+			case 'minimum':
+				return fc
+					.array(arbitraryFromAtom(fc)(quantifiedAtom.atom), {
+						minLength: quantifiedAtom.min,
+					})
+					.map((strs) => strs.join(''))
+		}
+	}
 
 const arbitraryFromTerm: (
 	fc: typeof FastCheck,
-) => (term: Term) => FastCheck.Arbitrary<string> = (fc) =>
-	match({
-		atom: arbitraryFromAtom(fc),
-		quantifiedAtom: arbitraryFromQuantifiedAtom(fc),
-	})
+) => (term: Term) => FastCheck.Arbitrary<string> = (fc) => (term) => {
+	switch (term.tag) {
+		case 'atom':
+			return arbitraryFromAtom(fc)(term)
+		case 'quantifiedAtom':
+			return arbitraryFromQuantifiedAtom(fc)(term)
+	}
+}
 
 const chainConcatAll: (
 	fc: typeof FastCheck,
 ) => (
 	fcs: ReadonlyArray<FastCheck.Arbitrary<string>>,
-) => FastCheck.Arbitrary<string> = (fc) =>
-	RA.foldLeft(
-		() => fc.constant(''),
-		(head, tail) =>
-			head.chain((headStr) =>
-				chainConcatAll(fc)(tail).map((tailStr) => headStr + tailStr),
-			),
-	)
+) => FastCheck.Arbitrary<string> = (fc) => (fcs) =>
+	fcs.length === 0
+		? fc.constant('')
+		: fcs[0].chain((headStr) =>
+				chainConcatAll(fc)(fcs.slice(1)).map((tailStr) => headStr + tailStr),
+		  )
 
 /**
  * Construct a `fast-check` `Arbitrary` instance from a given `Pattern`.
@@ -96,12 +104,18 @@ const chainConcatAll: (
  */
 export const arbitraryFromPattern: (
 	fc: typeof FastCheck,
-) => (pattern: Pattern) => FastCheck.Arbitrary<string> = (fc) =>
-	match({
-		atom: arbitraryFromAtom(fc),
-		disjunction: ({ left, right }) =>
-			fc.oneof(arbitraryFromPattern(fc)(left), arbitraryFromPattern(fc)(right)),
-		quantifiedAtom: arbitraryFromQuantifiedAtom(fc),
-		termSequence: ({ terms }) =>
-			pipe(terms.map(arbitraryFromTerm(fc)), chainConcatAll(fc)),
-	})
+) => (pattern: Pattern) => FastCheck.Arbitrary<string> = (fc) => (pattern) => {
+	switch (pattern.tag) {
+		case 'atom':
+			return arbitraryFromAtom(fc)(pattern)
+		case 'disjunction':
+			return fc.oneof(
+				arbitraryFromPattern(fc)(pattern.left),
+				arbitraryFromPattern(fc)(pattern.right),
+			)
+		case 'quantifiedAtom':
+			return arbitraryFromQuantifiedAtom(fc)(pattern)
+		case 'termSequence':
+			return pipe(pattern.terms.map(arbitraryFromTerm(fc)), chainConcatAll(fc))
+	}
+}

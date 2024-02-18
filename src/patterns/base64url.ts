@@ -1,8 +1,7 @@
-import { pipe } from 'fp-ts/function'
-
 import { and, anyNumber } from '../base'
 import { word } from '../character-classes'
 import { Pattern } from '../types'
+import { pipe } from '../util/pipe'
 
 /**
  * Matches any

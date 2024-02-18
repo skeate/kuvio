@@ -1,5 +1,5 @@
 import { rgbColor } from '../../src/patterns/rgb-color'
-import { testPattern } from '../utils/test-pattern'
+import { testPattern } from '../test-utils/test-pattern'
 
 testPattern({
 	name: 'rgbColor',

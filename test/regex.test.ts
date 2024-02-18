@@ -1,9 +1,7 @@
-import { pipe } from 'fp-ts/function'
-
 import * as k from '../src'
 
 describe('kuvio', () => {
-	const pattern: k.Pattern = pipe(
+	const pattern: k.Pattern = k.pipe(
 		k.exactString('foo'),
 		k.between(5, 9),
 		k.then(k.atLeastOne()(k.char('z'))),
@@ -12,9 +10,9 @@ describe('kuvio', () => {
 		k.maybe,
 		k.then(
 			k.sequence(
-				pipe(k.anything, k.anyNumber({ greedy: true })),
-				pipe(k.anything, k.anyNumber({ greedy: false })),
-				pipe(k.anything, k.anyNumber()),
+				k.pipe(k.anything, k.anyNumber({ greedy: true })),
+				k.pipe(k.anything, k.anyNumber({ greedy: false })),
+				k.pipe(k.anything, k.anyNumber()),
 				k.times(3)(k.non(k.lower)),
 			),
 		),

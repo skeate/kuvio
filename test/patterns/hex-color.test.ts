@@ -1,5 +1,5 @@
 import { hexColor } from '../../src/patterns/hex-color'
-import { testPattern } from '../utils/test-pattern'
+import { testPattern } from '../test-utils/test-pattern'
 
 testPattern({
 	name: 'hexColor',

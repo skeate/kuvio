@@ -1,8 +1,9 @@
 import * as fc from 'fast-check'
-import { pipe } from 'fp-ts/function'
 
 import * as k from '../src'
 import { arbitraryFromPattern } from '../src/arbitrary'
+import { arbitraryFromPattern as arbitraryFromPatternDeferred } from '../src/arbitrary-deferred'
+import { pipe } from '../src/util/pipe'
 
 describe('arbitrary derivation', () => {
 	const pattern: k.Pattern = pipe(
@@ -42,6 +43,12 @@ describe('arbitrary derivation', () => {
 		// woof, bad testing practices ahead, but I'm not sure of a better way to test Arbitraries
 		const regex = k.regexFromPattern(pattern)
 
+		fc.assert(fc.property(arbitrary, (s) => regex.test(s)))
+	})
+
+	it('can create Arbitraries in a deferred call manner', () => {
+		const arbitrary = arbitraryFromPatternDeferred(fc)(pattern)
+		const regex = k.regexFromPattern(pattern)
 		fc.assert(fc.property(arbitrary, (s) => regex.test(s)))
 	})
 })

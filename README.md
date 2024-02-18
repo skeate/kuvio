@@ -10,7 +10,8 @@ Badge](https://img.shields.io/codacy/grade/6c56da2df56d4dceb69fd38239640205)](ht
 [![version](https://img.shields.io/npm/v/kuvio)](https://www.npmjs.com/package/kuvio)
 
 `kuvio` is a tool to construct composable string patterns, from which you can
-derive things like regular expressions or [fast-check][] `Arbitrary`s.
+derive things like regular expressions or [fast-check][] `Arbitrary`s. As of
+v1.4.0, it requires no dependencies.
 
 `kuvio` is specifically for string-like patterns. If you want to extend this
 concept to more complicated data types, check out [schemata-ts][]! `kuvio` was
@@ -35,7 +36,7 @@ const lineNumber = k.exactly(4)(k.digit)
 
 // Create pattern functions
 const parenthesize = (p: k.Pattern) => k.subgroup(
-  k.sequence(k.char('('), p, k.char(')')
+  k.sequence(k.char('('), p, k.char(')'))
 )
 
 // Compose patterns to make more complex patterns
@@ -57,11 +58,11 @@ help keep `fast-check` out of your production code, `kuvio` does not include
 `fast-check` in the main export. If you want to use the `Arbitrary` functions,
 you'll need to import them separately from `kuvio/arbitrary`.
 
-If you are needlessly paranoid about `fast-check` possibly getting bundled in
-your application, `kuvio` also exports a version of the `Arbitrary` functions
-that take the `fast-check` library as an argument. You can import these from
-`kuvio/arbitrary-deferred`. However, this is going to be less efficient and
-convenient to use, so probably don't worry about it.
+`kuvio` also exports a version of the `Arbitrary` functions that take the
+`fast-check` library as an argument, to prevent any possible accidental
+inclusion of `fast-check` in production code. This _shouldn't_ be an issue, but
+there are many bundlers and we cannot test them all. You can import these from
+`kuvio/arbitrary-deferred`.
 
 [fast-check]: https://github.com/dubzzz/fast-check
 [schemata-ts]: https://github.com/jacob-alford/schemata-ts

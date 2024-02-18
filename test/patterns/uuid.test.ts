@@ -6,7 +6,7 @@ import {
 	uuidV4,
 	uuidV5,
 } from '../../src/patterns/uuid'
-import { testPattern } from '../utils/test-pattern'
+import { testPattern } from '../test-utils/test-pattern'
 
 const valid = {
 	1: ['E034B584-7D89-11E9-9669-1AECF481A97B'],

@@ -1,6 +1,3 @@
-import { match } from '@simspace/matchers'
-import * as RA from 'fp-ts/ReadonlyArray'
-
 import {
 	Atom,
 	Char,
@@ -34,15 +31,16 @@ const convertRanges: (
 	ranges: ReadonlyArray<
 		readonly [Char, Char] | Char | readonly [number, number]
 	>,
-) => CharacterClass['ranges'] = RA.map((range) => {
-	if (typeof range === 'string') {
-		return { lower: range.charCodeAt(0), upper: range.charCodeAt(0) } as const
-	}
-	const [c1, c2] = range
-	const lower = typeof c1 === 'string' ? c1.charCodeAt(0) : c1
-	const upper = typeof c2 === 'string' ? c2.charCodeAt(0) : c2
-	return { lower, upper } as const
-})
+) => CharacterClass['ranges'] = (ranges) =>
+	ranges.map((range) => {
+		if (typeof range === 'string') {
+			return { lower: range.charCodeAt(0), upper: range.charCodeAt(0) } as const
+		}
+		const [c1, c2] = range
+		const lower = typeof c1 === 'string' ? c1.charCodeAt(0) : c1
+		const upper = typeof c2 === 'string' ? c2.charCodeAt(0) : c2
+		return { lower, upper } as const
+	})
 
 /**
  * A pattern of a single character that matches a list of characters or ranges. The ranges
@@ -206,12 +204,18 @@ export const or: (
 	right,
 })
 
-const getTerms: (termOrSeq: Term | TermSequence) => TermSequence['terms'] =
-	match.w({
-		termSequence: ({ terms }) => terms,
-		atom: (atom) => [atom],
-		quantifiedAtom: (qatom) => [qatom],
-	})
+const getTerms: (termOrSeq: Term | TermSequence) => TermSequence['terms'] = (
+	termOrSeq,
+) => {
+	switch (termOrSeq.tag) {
+		case 'termSequence':
+			return termOrSeq.terms
+		case 'atom':
+			return [termOrSeq]
+		case 'quantifiedAtom':
+			return [termOrSeq]
+	}
+}
 
 /**
  * Append a term or term sequence onto another.

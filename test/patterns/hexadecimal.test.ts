@@ -1,5 +1,5 @@
 import { hexadecimal } from '../../src/patterns/hexadecimal'
-import { testPattern } from '../utils/test-pattern'
+import { testPattern } from '../test-utils/test-pattern'
 
 testPattern({
 	name: 'hexadecimal',

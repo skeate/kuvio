@@ -1,5 +1,5 @@
 import { jwt } from '../../src/patterns/jwt'
-import { testPattern } from '../utils/test-pattern'
+import { testPattern } from '../test-utils/test-pattern'
 
 testPattern({
 	name: 'jwt',

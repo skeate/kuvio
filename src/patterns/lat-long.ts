@@ -1,5 +1,3 @@
-import { pipe } from 'fp-ts/function'
-
 import {
 	anyNumber,
 	atLeastOne,
@@ -12,6 +10,7 @@ import {
 } from '../base'
 import { digit, space } from '../character-classes'
 import { integerRange, oneOf } from '../combinators'
+import { pipe } from '../util/pipe'
 
 const latPattern = pipe(
 	maybe(characterClass(false, '+', '-')),
