@@ -31,7 +31,7 @@ const convertRanges: (
 	ranges: ReadonlyArray<
 		readonly [Char, Char] | Char | readonly [number, number]
 	>,
-) => CharacterClass['ranges'] = (ranges) =>
+) => CharacterClass['ranges'] = (ranges): CharacterClass['ranges'] =>
 	ranges.map((range) => {
 		if (typeof range === 'string') {
 			return { lower: range.charCodeAt(0), upper: range.charCodeAt(0) } as const
@@ -267,12 +267,16 @@ export const and: {
 	(ccb: CharacterClass): (cca: CharacterClass) => CharacterClass
 } =
 	(
-		first,
+		first:
+			| readonly [Char, Char]
+			| Char
+			| readonly [number, number]
+			| CharacterClass,
 		...addl: ReadonlyArray<
 			readonly [Char, Char] | Char | readonly [number, number]
 		>
 	) =>
-	(cc) => ({
+	(cc): CharacterClass => ({
 		tag: 'atom',
 		kind: 'characterClass',
 		exclude: cc.exclude,

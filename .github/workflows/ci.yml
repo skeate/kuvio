@@ -93,8 +93,11 @@ jobs:
           Verify the integrity of provenance attestations and registry
           signatures for installed dependencies
         run: npm audit signatures
+      - name: Build
+        run: pnpm build
       - name: Release
-        run: pnpm dlx semantic-release@20 --branches main
+        working-directory: dist
+        run: pnpm dlx semantic-release --branches main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

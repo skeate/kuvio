@@ -2,36 +2,7 @@
 	"name": "kuvio",
 	"version": "0.0.1",
 	"description": "Create string patterns and derive things from them, such as regexes",
-	"files": [
-		"dist"
-	],
 	"sideEffects": false,
-	"main": "./dist/index.js",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.ts",
-	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"node": "./dist/index.js",
-			"require": "./dist/index.js",
-			"import": "./dist/index.mjs",
-			"default": "./dist/index.global.js"
-		},
-		"./arbitrary": {
-			"types": "./dist/arbitrary.d.ts",
-			"node": "./dist/arbitrary.js",
-			"require": "./dist/arbitrary.js",
-			"import": "./dist/arbitrary.mjs",
-			"default": "./dist/arbitrary.global.js"
-		},
-		"./arbitrary-deferred": {
-			"types": "./dist/arbitrary-deferred.d.ts",
-			"node": "./dist/arbitrary-deferred.js",
-			"require": "./dist/arbitrary-deferred.js",
-			"import": "./dist/arbitrary-deferred.mjs",
-			"default": "./dist/arbitrary-deferred.global.js"
-		}
-	},
 	"scripts": {
 		"build": "rimraf dist && tsup",
 		"test": "jest",
@@ -51,6 +22,7 @@
 	"author": "Jonathan Skeate",
 	"license": "MIT",
 	"devDependencies": {
+		"@fp-tx/build-tools": "^0.3.1",
 		"@trivago/prettier-plugin-sort-imports": "^4.1.1",
 		"@types/jest": "^29.5.1",
 		"commitizen": "^4.3.0",
