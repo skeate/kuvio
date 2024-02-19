@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, beta]
   pull_request:
-    branches: [main]
+    branches: [main, beta]
 
 jobs:
   test:
@@ -97,7 +97,7 @@ jobs:
         run: pnpm build
       - name: Release
         working-directory: dist
-        run: pnpm dlx semantic-release --branches main
+        run: pnpm dlx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
