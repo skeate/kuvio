@@ -32,21 +32,34 @@ describe('kuvio', () => {
 		k.or(k.atLeast(2)(k.exactString('bar'))),
 	)
 
+	const testPattern =
+		"(((foo){5,9}z+?y+)?.*.*?.*?[^a-z]{3}[0-4A#-'Q-T\\x1f-\\x2d\\x5e-\\x7f\\xff-\\u0100])|(bar){2,}"
+
 	it('can create RegExps', () => {
 		const actual = k.regexFromPattern(pattern)
 
-		expect(actual.source).toEqual(
-			"^((((foo){5,9}z+?y+)?.*.*?.*?[^a-z]{3}[0-4A#-'Q-T\\x1f-\\x2d\\x5e-\\x7f\\xff-\\u0100])|(bar){2,})$",
-		)
+		expect(actual.source).toEqual(`^(${testPattern})$`)
 		expect(actual.flags).toEqual('')
 	})
 
 	it('can create case-insensitive RegExps', () => {
 		const actual = k.regexFromPattern(pattern, true)
 
-		expect(actual.source).toEqual(
-			"^((((foo){5,9}z+?y+)?.*.*?.*?[^a-z]{3}[0-4A#-'Q-T\\x1f-\\x2d\\x5e-\\x7f\\xff-\\u0100])|(bar){2,})$",
-		)
+		expect(actual.source).toEqual(`^(${testPattern})$`)
 		expect(actual.flags).toEqual('i')
+	})
+
+	it('can create global RegExps', () => {
+		const actual = k.regexFromPattern(pattern, false, true)
+
+		expect(actual.source).toEqual(testPattern)
+		expect(actual.flags).toEqual('g')
+	})
+
+	it('can create multiline RegExps', () => {
+		const actual = k.regexFromPattern(pattern, false, false, true)
+
+		expect(actual.source).toEqual(`^(${testPattern})$`)
+		expect(actual.flags).toEqual('m')
 	})
 })
