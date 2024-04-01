@@ -110,8 +110,12 @@ const regexStringFromPattern: (pattern: Pattern) => string = (pattern) => {
 export const regexFromPattern = (
 	pattern: Pattern,
 	caseInsensitive = false,
+	global = false,
+	multiline = false,
 ): RegExp =>
 	new RegExp(
-		`^(${regexStringFromPattern(pattern)})$`,
-		caseInsensitive ? 'i' : '',
+		`${global ? '' : '^('}${regexStringFromPattern(pattern)}${
+			global ? '' : ')$'
+		}`,
+		`${global ? 'g' : ''}${caseInsensitive ? 'i' : ''}${multiline ? 'm' : ''}`,
 	)
