@@ -1,4 +1,5 @@
 import {
+	andThen,
 	anyNumber,
 	atLeastOne,
 	char,
@@ -6,7 +7,6 @@ import {
 	maybe,
 	sequence,
 	subgroup,
-	then,
 } from '../base'
 import { blank, digit } from '../character-classes'
 import { integerRange, oneOf } from '../combinators'
@@ -33,7 +33,7 @@ const hue = subgroup(
 		maybe(subgroup(oneOf(char('+'), char('-')))),
 		subgroup(
 			oneOf(
-				pipe(atLeastOne({ greedy: true })(digit), then(maybe(anyDecimal))),
+				pipe(atLeastOne({ greedy: true })(digit), andThen(maybe(anyDecimal))),
 				anyDecimal,
 			),
 		),
@@ -57,8 +57,8 @@ const percentage = subgroup(
 		anyNumber({ greedy: true })(char('0')),
 		subgroup(
 			oneOf(
-				pipe(exactString('100'), then(maybe(zeroDecimal))),
-				pipe(subgroup(integerRange(0, 99)), then(maybe(anyDecimal))),
+				pipe(exactString('100'), andThen(maybe(zeroDecimal))),
+				pipe(subgroup(integerRange(0, 99)), andThen(maybe(anyDecimal))),
 				anyDecimal,
 			),
 		),

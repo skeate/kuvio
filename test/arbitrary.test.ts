@@ -9,11 +9,11 @@ describe('arbitrary derivation', () => {
 	const pattern: k.Pattern = pipe(
 		k.exactString('foo'),
 		k.between(5, 9),
-		k.then(k.atLeastOne()(k.char('z'))),
-		k.then(k.atLeastOne({ greedy: true })(k.char('y'))),
+		k.andThen(k.atLeastOne()(k.char('z'))),
+		k.andThen(k.atLeastOne({ greedy: true })(k.char('y'))),
 		k.subgroup,
 		k.maybe,
-		k.then(
+		k.andThen(
 			k.sequence(
 				pipe(k.anything, k.anyNumber({ greedy: true })),
 				pipe(k.anything, k.anyNumber({ greedy: false })),
@@ -21,7 +21,7 @@ describe('arbitrary derivation', () => {
 				k.times(3)(k.non(k.lower)),
 			),
 		),
-		k.then(
+		k.andThen(
 			k.characterClass(
 				false,
 				['0', '4'],

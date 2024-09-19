@@ -9,6 +9,7 @@
  * [`schemata-ts`](https://github.com/jacob-alford/schemata-ts) library.
  */
 import {
+	andThen,
 	between,
 	char,
 	characterClass,
@@ -17,7 +18,6 @@ import {
 	or,
 	sequence,
 	subgroup,
-	then,
 } from '../base'
 import { digit } from '../character-classes'
 import { oneOf } from '../combinators'
@@ -29,7 +29,7 @@ import { pipe } from '../util/pipe'
 // /(^4(\d{12}|\d{15})$)/
 const visa = pipe(
 	char('4'),
-	then(pipe(exactly(12)(digit), or(exactly(15)(digit)), subgroup)),
+	andThen(pipe(exactly(12)(digit), or(exactly(15)(digit)), subgroup)),
 )
 
 // source: https://web.archive.org/web/20180514224309/https://www.mastercard.us/content/dam/mccom/global/documents/mastercard-rules.pdf
@@ -69,7 +69,7 @@ const mastercard = pipe(
 			or(sequence(exactString('2720'), exactly(2)(digit))),
 		),
 	),
-	then(exactly(10)(digit)),
+	andThen(exactly(10)(digit)),
 )
 
 // source: https://web.archive.org/web/20210504163517/https://www.americanexpress.com/content/dam/amex/hk/en/staticassets/merchant/pdf/support-and-services/useful-information-and-downloads/GuidetoCheckingCardFaces.pdf
@@ -112,7 +112,7 @@ const discover = pipe(
 	oneOf(
 		pipe(
 			exactString('6011'),
-			then(
+			andThen(
 				subgroup(
 					oneOf(
 						sequence(
@@ -174,7 +174,7 @@ const discover = pipe(
 		),
 	),
 	subgroup,
-	then(between(8, 11)(digit)),
+	andThen(between(8, 11)(digit)),
 )
 
 // /^(352[89]\d{4}|35[3-8]\d{5})\d{8,11}$/
@@ -192,7 +192,7 @@ const jcb = pipe(
 		),
 	),
 	subgroup,
-	then(between(8, 11)(digit)),
+	andThen(between(8, 11)(digit)),
 )
 
 // Rupay

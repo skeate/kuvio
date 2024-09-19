@@ -13,9 +13,9 @@
  *   const areaCode = pipe(
  *     k.pipe(
  *       k.char('('),
- *       k.then(k.times(3)(digit)),
- *       k.then(k.char(')')),
- *       k.then(k.maybe(k.char(' '))),
+ *       k.andThen(k.times(3)(digit)),
+ *       k.andThen(k.char(')')),
+ *       k.andThen(k.maybe(k.char(' '))),
  *     ),
  *     k.or(k.times(3)(digit)),
  *     k.subgroup,
@@ -27,10 +27,10 @@
  *
  *   export const usPhoneNumber = k.pipe(
  *     areaCode,
- *     k.then(pipe(k.char('-'), k.maybe)),
- *     k.then(prefix),
- *     k.then(k.char('-')),
- *     k.then(lineNumber),
+ *     k.andThen(pipe(k.char('-'), k.maybe)),
+ *     k.andThen(prefix),
+ *     k.andThen(k.char('-')),
+ *     k.andThen(lineNumber),
  *   )
  *
  *   assert.equal(k.regexFromPattern(usPhoneNumber).test('(123) 456-7890'), true)

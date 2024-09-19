@@ -1,5 +1,6 @@
 import {
 	and,
+	andThen,
 	anyNumber,
 	atLeast,
 	atLeastOne,
@@ -10,7 +11,6 @@ import {
 	or,
 	sequence,
 	subgroup,
-	then,
 } from '../base'
 import { alnum, alpha, digit } from '../character-classes'
 import { Pattern } from '../types'
@@ -19,8 +19,8 @@ import { pipe } from '../util/pipe'
 // (".+")
 const localPartQuoted = pipe(
 	char('"'),
-	then(atLeastOne({ greedy: true })(characterClass(true, '"', [0, 0x1f]))),
-	then(char('"')),
+	andThen(atLeastOne({ greedy: true })(characterClass(true, '"', [0, 0x1f]))),
+	andThen(char('"')),
 )
 
 const localPartUnquotedAllowedCharacters = characterClass(
@@ -52,10 +52,10 @@ const localPartUnquotedAllowedCharacters = characterClass(
 // [^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*
 const localPartUnquoted = pipe(
 	atLeastOne({ greedy: true })(localPartUnquotedAllowedCharacters),
-	then(
+	andThen(
 		pipe(
 			char('.'),
-			then(atLeastOne({ greedy: true })(localPartUnquotedAllowedCharacters)),
+			andThen(atLeastOne({ greedy: true })(localPartUnquotedAllowedCharacters)),
 			subgroup,
 			anyNumber({ greedy: true }),
 		),
@@ -85,10 +85,10 @@ const domainName = pipe(
 	alnum,
 	and('-'),
 	atMost(63),
-	then(char('.')),
+	andThen(char('.')),
 	subgroup,
 	atLeastOne({ greedy: true }),
-	then(atLeast(2)(alpha)),
+	andThen(atLeast(2)(alpha)),
 )
 
 const domain = pipe(domainIpAddress, or(domainName), subgroup)
@@ -99,6 +99,6 @@ const domain = pipe(domainIpAddress, or(domainName), subgroup)
  */
 export const emailAddress: Pattern = pipe(
 	localPart,
-	then(char('@')),
-	then(domain),
+	andThen(char('@')),
+	andThen(domain),
 )

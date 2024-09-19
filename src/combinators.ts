@@ -1,11 +1,11 @@
 import {
+	andThen,
 	char,
 	characterClass,
 	empty,
 	or,
 	sequence,
 	subgroup,
-	then,
 } from './base'
 import { digit } from './character-classes'
 import { Pattern, Term, TermSequence } from './types'
@@ -40,14 +40,14 @@ const integerRange_: (
 			: curMinDigit === curMaxDigit
 			? pipe(
 					char(curMinDigit.toString(10)),
-					then(subgroup(integerRange_(restMin, restMax))),
+					andThen(subgroup(integerRange_(restMin, restMax))),
 			  )
 			: oneOf(
 					curMinDigit === 0 && omitInitialZeros
 						? integerRange_(restMin, restMax.replace(/./g, '9'), true)
 						: pipe(
 								char(curMinDigit.toString(10)),
-								then(
+								andThen(
 									subgroup(integerRange_(restMin, restMin.replace(/./g, '9'))),
 								),
 						  ),
@@ -58,13 +58,17 @@ const integerRange_: (
 										(curMinDigit + 1).toString(10),
 										(curMaxDigit - 1).toString(10),
 									]),
-									then(sequence(empty, ...restMin.split('').map(() => digit))),
+									andThen(
+										sequence(empty, ...restMin.split('').map(() => digit)),
+									),
 								),
 						  ]
 						: []),
 					pipe(
 						char(curMaxDigit.toString(10)),
-						then(subgroup(integerRange_(restMin.replace(/./g, '0'), restMax))),
+						andThen(
+							subgroup(integerRange_(restMin.replace(/./g, '0'), restMax)),
+						),
 					),
 			  )
 

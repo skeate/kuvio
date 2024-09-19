@@ -1,4 +1,5 @@
 import {
+	andThen,
 	anyNumber,
 	atLeastOne,
 	char,
@@ -6,7 +7,6 @@ import {
 	maybe,
 	sequence,
 	subgroup,
-	then,
 } from '../base'
 import { digit, space } from '../character-classes'
 import { integerRange, oneOf } from '../combinators'
@@ -14,7 +14,7 @@ import { pipe } from '../util/pipe'
 
 const latPattern = pipe(
 	maybe(characterClass(false, '+', '-')),
-	then(
+	andThen(
 		subgroup(
 			oneOf(
 				sequence(
@@ -22,17 +22,17 @@ const latPattern = pipe(
 					char('0'),
 					maybe(
 						subgroup(
-							pipe(char('.'), then(atLeastOne({ greedy: true })(char('0')))),
+							pipe(char('.'), andThen(atLeastOne({ greedy: true })(char('0')))),
 						),
 					),
 				),
 				pipe(
 					integerRange(0, 89),
 					subgroup,
-					then(
+					andThen(
 						maybe(
 							subgroup(
-								pipe(char('.'), then(atLeastOne({ greedy: true })(digit))),
+								pipe(char('.'), andThen(atLeastOne({ greedy: true })(digit))),
 							),
 						),
 					),
@@ -44,7 +44,7 @@ const latPattern = pipe(
 
 const longPattern = pipe(
 	maybe(characterClass(false, '+', '-')),
-	then(
+	andThen(
 		subgroup(
 			oneOf(
 				sequence(
@@ -53,17 +53,17 @@ const longPattern = pipe(
 					char('0'),
 					maybe(
 						subgroup(
-							pipe(char('.'), then(atLeastOne({ greedy: true })(char('0')))),
+							pipe(char('.'), andThen(atLeastOne({ greedy: true })(char('0')))),
 						),
 					),
 				),
 				pipe(
 					integerRange(0, 179),
 					subgroup,
-					then(
+					andThen(
 						maybe(
 							subgroup(
-								pipe(char('.'), then(atLeastOne({ greedy: true })(digit))),
+								pipe(char('.'), andThen(atLeastOne({ greedy: true })(digit))),
 							),
 						),
 					),
@@ -80,16 +80,16 @@ const longPattern = pipe(
 export const latLong = oneOf(
 	pipe(
 		latPattern,
-		then(char(',')),
-		then(anyNumber({ greedy: true })(space)),
-		then(longPattern),
+		andThen(char(',')),
+		andThen(anyNumber({ greedy: true })(space)),
+		andThen(longPattern),
 	),
 	pipe(
 		char('('),
-		then(latPattern),
-		then(char(',')),
-		then(anyNumber({ greedy: true })(space)),
-		then(longPattern),
-		then(char(')')),
+		andThen(latPattern),
+		andThen(char(',')),
+		andThen(anyNumber({ greedy: true })(space)),
+		andThen(longPattern),
+		andThen(char(')')),
 	),
 )

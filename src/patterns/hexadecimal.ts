@@ -1,4 +1,4 @@
-import { atLeastOne, exactString, maybe, or, subgroup, then } from '../base'
+import { andThen, atLeastOne, exactString, maybe, or, subgroup } from '../base'
 import { xdigit } from '../character-classes'
 import { Pattern } from '../types'
 import { pipe } from '../util/pipe'
@@ -17,5 +17,5 @@ export const hexadecimal: Pattern = pipe(
 	or(exactString('0H')),
 	subgroup,
 	maybe,
-	then(atLeastOne()(xdigit)),
+	andThen(atLeastOne()(xdigit)),
 )

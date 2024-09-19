@@ -1,4 +1,4 @@
-import { between, char, exactly, maybe, or, subgroup, then } from '../base'
+import { andThen, between, char, exactly, maybe, or, subgroup } from '../base'
 import { hexDigit } from '../character-classes'
 import { Pattern } from '../types'
 import { pipe } from '../util/pipe'
@@ -10,7 +10,7 @@ import { pipe } from '../util/pipe'
  */
 export const hexColor: Pattern = pipe(
 	maybe(char('#')),
-	then(
+	andThen(
 		subgroup(
 			pipe(
 				between(3, 4)(hexDigit),

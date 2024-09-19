@@ -1,5 +1,6 @@
 import {
 	and,
+	andThen,
 	anyNumber,
 	char,
 	characterClass,
@@ -7,7 +8,6 @@ import {
 	maybe,
 	sequence,
 	subgroup,
-	then,
 } from '../base'
 import { alnum } from '../character-classes'
 import { oneOf } from '../combinators'
@@ -29,7 +29,7 @@ export const base64: Pattern = pipe(
 	exactly(4),
 	subgroup,
 	anyNumber(),
-	then(
+	andThen(
 		maybe(
 			subgroup(
 				oneOf(

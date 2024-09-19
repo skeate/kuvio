@@ -222,7 +222,7 @@ const getTerms: (termOrSeq: Term | TermSequence) => TermSequence['terms'] = (
  *
  * @since 0.0.1
  */
-export const then: (
+export const andThen: (
 	term: Term | TermSequence,
 ) => (alt: TermSequence | Term) => TermSequence = (term) => (alt) => ({
 	tag: 'termSequence',
